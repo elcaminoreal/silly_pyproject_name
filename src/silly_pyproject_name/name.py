@@ -18,12 +18,16 @@ def _pyproject_toml(args):
 def _load_pyproject(pwd):
     return tomlkit.loads((pathlib.Path(pwd) / "pyproject.toml").read_text())
 
-
+# This commands reads, and logs, the name.
 @ENTRY_DATA.register()
 def name(args):
     name = tomlkit.loads(_pyproject_toml(args).read_text())["project"]["name"]
+    # Regular output can be logged at "INFO" levels.
     LOGGER.info("Current name: %s", name)
 
+# This command modifies the name.
+# It will only effect the modification
+# if explicitly requested via --no-dry-run.
 @ENTRY_DATA.register(
     add_argument("--no-dry-run", action="store_true", default=False),
     add_argument("new_name"),
@@ -39,8 +43,12 @@ def rename(args):
         new_contents.splitlines(),
         lineterm="",
     )
+    # This logs the diffs. The end-user can see what will
+    # change.
     for a_diff in diffs:
         LOGGER.info("Difference: %s", a_diff.rstrip())
+    # Explicitly check no-dry-run before writing the file.
+    # Otherwise, clearly log that the actual side-effect is skipped.
     if args.no_dry_run:
         toml_file.write_text(new_contents)
     else:

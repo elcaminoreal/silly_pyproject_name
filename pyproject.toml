@@ -51,7 +51,12 @@ is_main_match = ".*/trunk$"
 [project.entry-points.gather]
 placeholder = "silly_pyproject_name"
 
+# This allows running the scripts using
+# script entry points. Note that `python -m silly_project_name` still
+# works correctly.
 [project.scripts]
+# The eponymous command allows running all subcommands.
 silly-pyproject-name = "silly_pyproject_name:ENTRY_DATA.main_command"
-silly-pyproject-change = "silly_pyproject_name:ENTRY_DATA.sub_command"
+# This allows running a subcommand directly.
+silly-pyproject-name-rename = "silly_pyproject_name:ENTRY_DATA.sub_command"
 
