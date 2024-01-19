@@ -54,3 +54,4 @@ placeholder = "silly_pyproject_name"
 [project.scripts]
 silly-pyproject-name = "silly_pyproject_name:ENTRY_DATA.main_command"
 silly-pyproject-change = "silly_pyproject_name:ENTRY_DATA.sub_command"
+
