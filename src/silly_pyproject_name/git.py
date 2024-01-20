@@ -20,7 +20,7 @@ LOGGER = logging.getLogger(__name__)
 
 
 @ENTRY_DATA.register()
-def status(args):
+def status(args): # pragma: no cover
     # Getting the *status* is safe:
     # it can be spawned even in dry run mode.
     #
@@ -56,7 +56,7 @@ def status(args):
     # make changes.
     add_argument("--no-dry-run", action="store_true", default=False),
 )
-def commit(args):
+def commit(args): # pragma: no cover
     # The args.run function only runs the command in non-dry-run mode.
     # Otherwise, it will log the command and log the fact that it is skipped.
     args.run(

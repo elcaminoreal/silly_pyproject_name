@@ -15,9 +15,6 @@ LOGGER = logging.getLogger(__name__)
 def _pyproject_toml(args):
     return pathlib.Path(args.env["PWD"]) / "pyproject.toml"
 
-def _load_pyproject(pwd):
-    return tomlkit.loads((pathlib.Path(pwd) / "pyproject.toml").read_text())
-
 # This commands reads, and logs, the name.
 @ENTRY_DATA.register()
 def name(args):
