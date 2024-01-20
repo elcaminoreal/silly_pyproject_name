@@ -1,9 +1,8 @@
+import argparse
 import difflib
 import pathlib
 import logging
 
-from commander_data import COMMAND
-from commander_data.common import GIT
 from gather.commands import add_argument
 import tomlkit
 
@@ -12,15 +11,20 @@ from . import ENTRY_DATA
 
 LOGGER = logging.getLogger(__name__)
 
-def _pyproject_toml(args):
+
+def _pyproject_toml(args: argparse.Namespace) -> pathlib.Path:
     return pathlib.Path(args.env["PWD"]) / "pyproject.toml"
+
 
 # This commands reads, and logs, the name.
 @ENTRY_DATA.register()
-def name(args):
-    name = tomlkit.loads(_pyproject_toml(args).read_text())["project"]["name"]
+def name(args: argparse.Namespace) -> None:
+    name = tomlkit.loads(_pyproject_toml(args).read_text())["project"][
+        "name"
+    ]  # type: ignore
     # Regular output can be logged at "INFO" levels.
     LOGGER.info("Current name: %s", name)
+
 
 # This command modifies the name.
 # It will only effect the modification
@@ -29,11 +33,11 @@ def name(args):
     add_argument("--no-dry-run", action="store_true", default=False),
     add_argument("new_name"),
 )
-def rename(args):
+def rename(args: argparse.Namespace) -> None:
     toml_file = _pyproject_toml(args)
     old_contents = toml_file.read_text()
     parsed = tomlkit.loads(old_contents)
-    parsed["project"]["name"] = args.new_name
+    parsed["project"]["name"] = args.new_name  # type: ignore
     new_contents = tomlkit.dumps(parsed)
     diffs = difflib.unified_diff(
         old_contents.splitlines(),

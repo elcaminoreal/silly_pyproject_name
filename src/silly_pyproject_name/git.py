@@ -3,9 +3,9 @@ Showcase how to use commands.
 
 This is a wrapper around Git commands.
 """
+import argparse
 import logging
 
-from commander_data import COMMAND
 from commander_data.common import GIT
 
 from gather.commands import add_argument
@@ -20,7 +20,7 @@ LOGGER = logging.getLogger(__name__)
 
 
 @ENTRY_DATA.register()
-def status(args): # pragma: no cover
+def status(args: argparse.Namespace) -> None:  # pragma: no cover
     # Getting the *status* is safe:
     # it can be spawned even in dry run mode.
     #
@@ -49,6 +49,7 @@ def status(args): # pragma: no cover
     else:
         LOGGER.warning("pyproject.toml is up to date")
 
+
 @ENTRY_DATA.register(
     # The commit command has side-effects.
     # By default, it will skip side effects --
@@ -56,7 +57,7 @@ def status(args): # pragma: no cover
     # make changes.
     add_argument("--no-dry-run", action="store_true", default=False),
 )
-def commit(args): # pragma: no cover
+def commit(args: argparse.Namespace) -> None:  # pragma: no cover
     # The args.run function only runs the command in non-dry-run mode.
     # Otherwise, it will log the command and log the fact that it is skipped.
     args.run(
